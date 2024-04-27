@@ -1,0 +1,24 @@
+name: Release new version
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    types: closed
+
+jobs:
+  release:
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          tag: ${{ github.event.pull_request.title }}
+          name: ${{ github.event.pull_request.title }}
