@@ -1,54 +1,57 @@
 {
-  "name": "react-native-background-timer",
-  "version": "2.4.1",
-  "description": "Emit event periodically (even when app is in the background)",
-  "keywords": [
-    "react-native",
-    "background",
-    "timer",
-    "android",
-    "ios"
-  ],
-  "main": "index.js",
-  "scripts": {
-    "eslint": "eslint *.js",
-    "eslint:fix": "yarn eslint --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ocetnik/react-native-background-timer.git"
-  },
-  "author": "David Ocetnik",
-  "license": "MIT",
-  "peerDependencies": {
-    "react-native": ">=0.47.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.21.3",
-    "eslint": "^8.36.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.1.2",
-    "prettier": "^2.8.4",
-    "react": "17.0.2",
-    "react-native": "^0.68.6"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  }
+	"name": "react-native-background-timer",
+	"version": "2.4.1",
+	"description": "Emit event periodically (even when app is in the background)",
+	"keywords": [
+		"react-native",
+		"background",
+		"timer",
+		"android",
+		"ios"
+	],
+	"main": "index.js",
+	"scripts": {
+		"eslint": "eslint *.js",
+		"eslint:fix": "yarn eslint --fix",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"format": "prettier --write \"{src/**/*,*}.{js,jsx,ts,tsx,css,md,json}\"",
+		"check-format": "prettier -c \"{src/**/*,*}.{js,jsx,ts,tsx,css,md,json}\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ocetnik/react-native-background-timer.git"
+	},
+	"author": "David Ocetnik",
+	"fork": "boterop",
+	"license": "MIT",
+	"peerDependencies": {
+		"react-native": ">=0.47.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.21.3",
+		"eslint": "^8.36.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-prettier": "^8.6.0",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.32.2",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"husky": "^8.0.3",
+		"lint-staged": "^13.1.2",
+		"prettier": "^2.8.4",
+		"react": "17.0.2",
+		"react-native": "^0.68.6"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.js": [
+			"eslint --fix",
+			"git add"
+		]
+	}
 }
