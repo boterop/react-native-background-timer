@@ -1,6 +1,6 @@
 {
 	"name": "react-native-background-timer",
-	"version": "2.4.1",
+	"version": "2.4.2",
 	"description": "Emit event periodically (even when app is in the background)",
 	"keywords": [
 		"react-native",
@@ -14,8 +14,8 @@
 		"eslint": "eslint *.js",
 		"eslint:fix": "yarn eslint --fix",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"format": "prettier --write \"{src/**/*,*}.{js,jsx,ts,tsx,css,md,json}\"",
-		"check-format": "prettier -c \"{src/**/*,*}.{js,jsx,ts,tsx,css,md,json}\""
+		"format": "prettier --write \"{src/**/*,.github/**/*,*}.{js,jsx,ts,tsx,css,md,json,yml}\"",
+		"check-format": "prettier -c \"{src/**/*,.github/**/*,*}.{js,jsx,ts,tsx,css,md,json,yml}\""
 	},
 	"repository": {
 		"type": "git",
