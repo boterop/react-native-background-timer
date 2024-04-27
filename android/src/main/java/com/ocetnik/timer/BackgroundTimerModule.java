@@ -85,9 +85,15 @@ public class BackgroundTimerModule extends ReactContextBaseJavaModule {
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                         .emit("backgroundTimer.timeout", id);
                 }
-           }
+            }
         }, (long) timeout);
     }
+
+    @ReactMethod
+    public void addListener(String eventName) {}
+
+    @ReactMethod
+    public void removeListeners(Integer count) {}
 
     /*@ReactMethod
     public void clearTimeout(final int id) {
