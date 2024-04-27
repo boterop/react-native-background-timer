@@ -1,5 +1,5 @@
 {
-	"name": "react-native-background-timer",
+	"name": "@boterop/react-native-background-timer",
 	"version": "2.5.0",
 	"description": "Emit event periodically (even when app is in the background)",
 	"keywords": [
