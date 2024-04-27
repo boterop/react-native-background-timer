@@ -57,7 +57,7 @@ Link the library manually if you get errors:
 - `android/app/src/main/java/com/your-app/MainApplication.java`
 
       ```diff
-      + import com.ocetnik.timer.BackgroundTimerPackage;
+      + import io.boterop.timer.BackgroundTimerPackage;
 
       @Override
       protected List<ReactPackage> getPackages() {

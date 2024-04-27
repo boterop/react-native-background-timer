@@ -1,4 +1,4 @@
-package com.ocetnik.timer;
+package io.boterop.timer;
 
 import android.os.Handler;
 import android.os.PowerManager;

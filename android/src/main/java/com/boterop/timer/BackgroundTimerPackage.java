@@ -1,4 +1,4 @@
-package com.ocetnik.timer;
+package io.boterop.timer;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
