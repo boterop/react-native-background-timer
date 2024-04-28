@@ -13,15 +13,15 @@ Emit event periodically (even when app is in the background).
 2. Install React Native Background Timer package.
 
    ```bash
-   yarn add react-native-background-timer
+   yarn add @boterop/react-native-background-timer
    # or using npm
-   npm install react-native-background-timer --save
+   npm install @boterop/react-native-background-timer --save
    ```
 
 3. Link React Native Background Timer library. This step is not necessary when you use React Native >= 0.60 (and your app is not ejected from Expo).
 
    ```bash
-   react-native link react-native-background-timer
+   react-native link @boterop/react-native-background-timer
    ```
 
 4. If you use CocoaPods or React Native >= 0.60 (and your app is not ejected from Expo) or your app is ejected from Expo, then before running your app on iOS, make sure you have CocoaPods installed and run:
@@ -75,7 +75,7 @@ Link the library manually if you get errors:
 - `ios/Podfile`
 
       ```diff
-      + pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+      + pod '@boterop/react-native-background-timer', :path => '../node_modules/@boterop/react-native-background-timer'
       ```
 
   </details>
@@ -83,7 +83,7 @@ Link the library manually if you get errors:
 ## Usage
 
 ```js
-import BackgroundTimer from 'react-native-background-timer';
+import BackgroundTimer from '@boterop/react-native-background-timer';
 ```
 
 ### Crossplatform
@@ -157,7 +157,7 @@ import {
 	Platform,
 } from 'react-native';
 
-import BackgroundTimer from 'react-native-background-timer';
+import BackgroundTimer from '@boterop/react-native-background-timer';
 ```
 
 ```js
