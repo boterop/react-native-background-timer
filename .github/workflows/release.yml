@@ -21,3 +21,4 @@ jobs:
         with:
           tag: ${{ github.event.pull_request.title }}
           name: ${{ github.event.pull_request.title }}
+          body: ${{ github.event.pull_request.body }}
