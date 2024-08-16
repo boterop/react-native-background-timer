@@ -1,6 +1,10 @@
 # Changelog
 
-## 2.5.1 (27.04.2014)
+## 2.5.2 (16.08.2024)
+
+- Fixes issue #13
+
+## 2.5.1 (27.04.2024)
 
 - Update scope to correct installations
 
