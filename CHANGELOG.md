@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.0 (04.09.2025)
+
+- [Typescript Support](https://github.com/boterop/react-native-background-timer/pull/20)
+
 ## 2.5.2 (16.08.2024)
 
 - Fixes issue #13
