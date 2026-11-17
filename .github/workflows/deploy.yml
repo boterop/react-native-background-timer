@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - main
-    types: closed
+    types: [closed]
 
 jobs:
   build:
@@ -16,6 +16,4 @@ jobs:
           node-version: '18.16.0'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --access public
