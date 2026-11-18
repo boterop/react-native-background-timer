@@ -42,14 +42,18 @@ class BackgroundTimer {
 			ios: () => NativeAppEventEmitter,
 			android: () => DeviceEventEmitter,
 		})();
-		this.start(0);
+		if (this.backgroundListener) {
+			this.backgroundListener.remove();
+		}
 		this.backgroundListener = EventEmitter.addListener(
 			'backgroundTimer',
 			() => {
 				this.backgroundListener.remove();
+				this.backgroundListener = null;
 				this.backgroundClockMethod(callback, delay);
 			},
 		);
+		this.start(0);
 	}
 
 	backgroundClockMethod(callback, delay) {
@@ -61,6 +65,10 @@ class BackgroundTimer {
 
 	stopBackgroundTimer() {
 		this.stop();
+		if (this.backgroundListener) {
+			this.backgroundListener.remove();
+			this.backgroundListener = null;
+		}
 		this.clearTimeout(this.backgroundTimer);
 	}
 
@@ -80,7 +88,9 @@ class BackgroundTimer {
 	clearTimeout(timeoutId) {
 		if (this.callbacks[timeoutId]) {
 			delete this.callbacks[timeoutId];
-			// RNBackgroundTimer.clearTimeout(timeoutId);
+			if (RNBackgroundTimer.clearTimeout) {
+				RNBackgroundTimer.clearTimeout(timeoutId);
+			}
 		}
 	}
 
@@ -99,7 +109,9 @@ class BackgroundTimer {
 	clearInterval(intervalId) {
 		if (this.callbacks[intervalId]) {
 			delete this.callbacks[intervalId];
-			// RNBackgroundTimer.clearTimeout(intervalId);
+			if (RNBackgroundTimer.clearTimeout) {
+				RNBackgroundTimer.clearTimeout(intervalId);
+			}
 		}
 	}
 }

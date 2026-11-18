@@ -1,21 +1,25 @@
 package io.boterop.timer;
 
 import android.content.Intent;
-
+import android.os.Handler;
+import android.os.Looper;
 import androidx.core.content.ContextCompat;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class BackgroundTimerModule extends ReactContextBaseJavaModule {
     private static ReactApplicationContext reactApplicationContext;
-
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Map<Integer, Runnable> timeouts = new ConcurrentHashMap<>();
     public BackgroundTimerModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        BackgroundTimerModule.reactApplicationContext = reactContext;
+        reactApplicationContext = reactContext;
     }
 
     @Override
@@ -23,44 +27,48 @@ public class BackgroundTimerModule extends ReactContextBaseJavaModule {
         return "RNBackgroundTimer";
     }
 
-    static ReactApplicationContext getReactApplicationContext() {
-        return reactApplicationContext;
-    }
-
     static void emitEvent(String eventName, Object data) {
-        if (reactApplicationContext != null && reactApplicationContext.hasActiveCatalystInstance()) {
-            reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(eventName, data);
+        ReactApplicationContext context = reactApplicationContext;
+        if (context != null && context.hasActiveCatalystInstance()) {
+            context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, data);
         }
     }
 
     @ReactMethod
     public void start(final int delay) {
-        Intent serviceIntent = new Intent(getReactApplicationContext(), BackgroundTimerService.class);
-        serviceIntent.putExtra("delayMs", (long) delay);
-        ContextCompat.startForegroundService(getReactApplicationContext(), serviceIntent);
+        Intent intent = new Intent(reactApplicationContext, BackgroundTimerService.class);
+        intent.putExtra("delayMs", Math.max(0, delay));
+        ContextCompat.startForegroundService(reactApplicationContext, intent);
     }
 
     @ReactMethod
     public void stop() {
-        Intent serviceIntent = new Intent(getReactApplicationContext(), BackgroundTimerService.class);
-        getReactApplicationContext().stopService(serviceIntent);
+        reactApplicationContext.stopService(new Intent(reactApplicationContext, BackgroundTimerService.class));
     }
 
     @ReactMethod
     public void setTimeout(final int id, final double timeout) {
-        final ReactContext reactContext = getReactApplicationContext();
-        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+        clearTimeout(id);
+        Runnable timeoutRunnable = new Runnable() {
             @Override
             public void run() {
-                if (reactContext.hasActiveCatalystInstance()) {
-                    reactContext
-                            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                timeouts.remove(id);
+                if (reactApplicationContext.hasActiveCatalystInstance()) {
+                    reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                             .emit("backgroundTimer.timeout", id);
                 }
             }
-        }, (long) timeout);
+        };
+        timeouts.put(id, timeoutRunnable);
+        handler.postDelayed(timeoutRunnable, Math.max(0L, (long) timeout));
+    }
+
+    @ReactMethod
+    public void clearTimeout(final int id) {
+        Runnable timeoutRunnable = timeouts.remove(id);
+        if (timeoutRunnable != null) {
+            handler.removeCallbacks(timeoutRunnable);
+        }
     }
 
     @ReactMethod

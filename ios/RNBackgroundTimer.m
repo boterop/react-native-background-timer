@@ -12,9 +12,21 @@
 @implementation RNBackgroundTimer {
     UIBackgroundTaskIdentifier bgTask;
     int delay;
+    NSMutableDictionary<NSNumber *, dispatch_block_t> *timeoutBlocks;
+    NSMutableDictionary<NSNumber *, NSNumber *> *timeoutTasks;
 }
 
 RCT_EXPORT_MODULE()
+
+- (instancetype)init
+{
+    if ((self = [super init])) {
+        timeoutBlocks = [NSMutableDictionary new];
+        timeoutTasks = [NSMutableDictionary new];
+        bgTask = UIBackgroundTaskInvalid;
+    }
+    return self;
+}
 
 - (NSArray<NSString *> *)supportedEvents { return @[@"backgroundTimer", @"backgroundTimer.timeout"]; }
 
@@ -65,26 +77,45 @@ RCT_EXPORT_METHOD(setTimeout:(int)timeoutId
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
+    NSNumber *key = @(timeoutId);
+    [self clearTimeout:timeoutId resolver:^(__unused id result) {} rejecter:^(__unused NSString *code, __unused NSString *message, __unused NSError *error) {}];
     __block UIBackgroundTaskIdentifier task = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"RNBackgroundTimer" expirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:task];
+        task = UIBackgroundTaskInvalid;
+        [self->timeoutBlocks removeObjectForKey:key];
+        [self->timeoutTasks removeObjectForKey:key];
     }];
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+    dispatch_block_t timeoutBlock = dispatch_block_create(0, ^{
+        [self->timeoutBlocks removeObjectForKey:key];
+        [self->timeoutTasks removeObjectForKey:key];
         if ([self bridge] != nil) {
             [self sendEventWithName:@"backgroundTimer.timeout" body:[NSNumber numberWithInt:timeoutId]];
         }
         [[UIApplication sharedApplication] endBackgroundTask:task];
     });
+    self->timeoutBlocks[key] = timeoutBlock;
+    self->timeoutTasks[key] = @(task);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, MAX(0, timeout) * NSEC_PER_MSEC), dispatch_get_main_queue(), timeoutBlock);
     resolve([NSNumber numberWithBool:YES]);
 }
 
-/*
 RCT_EXPORT_METHOD(clearTimeout:(int)timeoutId
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    // Do nothing :)
-    // timeout will be ignored in javascript anyway :)
-}*/
+    NSNumber *key = @(timeoutId);
+    dispatch_block_t timeoutBlock = timeoutBlocks[key];
+    if (timeoutBlock) {
+        dispatch_block_cancel(timeoutBlock);
+        [timeoutBlocks removeObjectForKey:key];
+        NSNumber *taskNumber = timeoutTasks[key];
+        if (taskNumber) {
+            UIBackgroundTaskIdentifier task = (UIBackgroundTaskIdentifier)taskNumber.integerValue;
+            [[UIApplication sharedApplication] endBackgroundTask:task];
+            [timeoutTasks removeObjectForKey:key];
+        }
+    }
+    resolve([NSNumber numberWithBool:YES]);
+}
 
 @end
