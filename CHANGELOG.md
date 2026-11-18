@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.7.1 (18.11.2026)
+
+- Added the Android 14 `specialUse` foreground service type and required permission.
+- Made native timeouts cancellable on Android and iOS; `clearTimeout` and `clearInterval` now cancel pending native callbacks.
+- Improved background timer listener cleanup when restarting or stopping the timer.
+- Updated the Android foreground service notification and lifecycle handling.
+
 ## 2.7.0 (17.11.2026)
 
 - Fixed background timer behavior on Android 14.
