@@ -11,7 +11,7 @@ declare module '@boterop/react-native-background-timer' {
 		start: (delay?: number) => void;
 		stop: () => void;
 		setTimeout: (id: number, timeout: number) => void;
-		clearTimeout?: (id: number) => void;
+		clearTimeout: (id: number) => void;
 	}
 
 	export interface BackgroundTimerInterface {
